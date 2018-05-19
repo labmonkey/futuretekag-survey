@@ -74,7 +74,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void requestUserName(){
-        if(userName==null){
+        if(userName == null || userName.isEmpty()){
             openInputDialog(new View.OnClickListener() {
                 public void onClick(View v) {
                     EditText userInput = ((EditText) v.findViewById(R.id.userInput));
@@ -87,21 +87,25 @@ public class MainActivity extends BaseActivity {
                     if (userName == null || userName.isEmpty()) {
                         List<String> textArray = new ArrayList<String>(1);
                         textArray.add("Didn't get your name...");
-                        animateText(textArray, new AnimationListDone() {
-                            public void done() {
-                                activateNextButton();
-                            }
-                        });
+                        animateText(textArray);
                     } else {
-                        getDatabase().put("usersName", userName);
-                        List<String> textArray = new ArrayList<String>(2);
-                        textArray.add("Ah, nice.");
-                        textArray.add("Hi " + userName + "!");
-                        animateText(textArray, new AnimationListDone() {
-                            public void done() {
-                                activateNextButton();
-                            }
-                        });
+                        boolean success = getDatabase().put("usersName", userName);
+
+                        if(success) {
+                            List<String> textArray = new ArrayList<String>(2);
+                            textArray.add("Ah, nice.");
+                            textArray.add("Hi " + userName + "!");
+                            animateText(textArray, new AnimationListDone() {
+                                public void done() {
+                                    activateNextButton();
+                                }
+                            });
+                        } else {
+                            List<String> textArray = new ArrayList<String>(2);
+                            textArray.add("Database error.");
+                            textArray.add("Try different name.");
+                            animateText(textArray);
+                        }
                     }
                 }
             });
