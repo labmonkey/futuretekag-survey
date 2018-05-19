@@ -80,7 +80,7 @@ public class MainActivity extends BaseActivity {
                     EditText userInput = ((EditText) v.findViewById(R.id.userInput));
                     userName = null;
                     try {
-                        userName = getDatabase().get("usersName");
+                        userName = userInput.getText().toString();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
