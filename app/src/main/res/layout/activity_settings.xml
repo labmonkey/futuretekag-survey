@@ -11,10 +11,24 @@
         android:id="@+id/insertBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/nextBtn3"
+        android:layout_centerHorizontal="true"
         android:background="@drawable/btn_bg"
         android:fontFamily="monospace"
         android:text="Add Skill \u2714"
+        android:textColor="#09FF00"
+        android:textSize="22dp" />
+
+    <Button
+        android:id="@+id/nextBtn3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="11dp"
+        android:background="@drawable/btn_bg"
+        android:fontFamily="monospace"
+        android:text="next \u25B7"
         android:textColor="#09FF00"
         android:textSize="22dp" />
 
@@ -33,11 +47,11 @@
 
         </LinearLayout>
     </ScrollView>
+
     <ListView
         android:id="@+id/listView"
-        android:layout_below="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        ></ListView>
+        android:layout_height="249dp"
+        android:layout_below="@+id/scrollView"></ListView>
 
 </RelativeLayout>

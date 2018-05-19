@@ -27,6 +27,7 @@ import java.util.List;
 
 public class SkillsActivity extends BaseActivity {
     private Button btn_add;
+    private Button nextBtn;
     private ListView listview;
     public List<String> _productlist = new ArrayList<String>();
     private ListAdapter adapter;
@@ -63,6 +64,14 @@ public class SkillsActivity extends BaseActivity {
                         }
                     }
                 });
+            }
+        });
+
+
+        nextBtn = (Button) findViewById(R.id.nextBtn3);
+        nextBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                startActivity(new Intent(SkillsActivity.this, FinishActivity.class));
             }
         });
     }
