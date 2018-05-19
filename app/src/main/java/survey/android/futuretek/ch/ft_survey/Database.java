@@ -43,16 +43,17 @@ public class Database extends SQLiteOpenHelper {
 		this.onCreate(db);
 	}
 
-	public void put(String key, String value) {
+	public boolean put(String key, String value) {
 		if(exists(key)){
-			update(key, value);
+			return update(key, value) > -1;
 		}else{
 			SQLiteDatabase db = this.getWritableDatabase();
 			ContentValues values = new ContentValues();
 			values.put(fieldID, key);
 			values.put(fieldVal, value);
-			db.insert(tableAdminSettings, null, values);
+			int i = (int) db.insert(tableAdminSettings, null, values);
 			db.close();
+			return i > -1;
 		}
 	}
 
