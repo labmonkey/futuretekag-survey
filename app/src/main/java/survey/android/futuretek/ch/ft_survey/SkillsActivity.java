@@ -9,6 +9,7 @@ package survey.android.futuretek.ch.ft_survey;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ public class SkillsActivity extends BaseActivity {
     private ListView listview;
     public List<String> _productlist = new ArrayList<String>();
     private ListAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,12 +44,33 @@ public class SkillsActivity extends BaseActivity {
             }
         });
 
+
+        btn_add = (Button) findViewById(R.id.insertBtn);
+        btn_add.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                openInputDialog(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        EditText userInput = ((EditText) v.findViewById(R.id.userInput));
+                        String skill = null;
+                        try {
+                            skill = userInput.getText().toString();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        if (!(skill == null || skill.isEmpty())) {
+                            insertSkill(skill);
+                        }
+                    }
+                });
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        ((ViewGroup)findViewById(R.id.textLayout)).removeAllViews();
+        ((ViewGroup) findViewById(R.id.textLayout)).removeAllViews();
         List<String> textArray = new ArrayList<>(1);
         textArray.add("Please add a developer skill");
         animateText(textArray);
@@ -85,8 +108,8 @@ public class SkillsActivity extends BaseActivity {
                 viewHolder.delBtn = (Button) convertView.findViewById(R.id.deleteBtn);
                 viewHolder.delBtn.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        ViewGroup row = ((ViewGroup)v.getParent());
-                        String id = ((TextView)row.findViewById(R.id.textView1)).getText().toString();
+                        ViewGroup row = ((ViewGroup) v.getParent());
+                        String id = ((TextView) row.findViewById(R.id.textView1)).getText().toString();
                         getDatabase().deleteSkill(id);
                         _productlist.remove(id);
                         adapter.notifyDataSetChanged();
@@ -96,8 +119,8 @@ public class SkillsActivity extends BaseActivity {
                 viewHolder.updBtn = (Button) convertView.findViewById(R.id.updateBtn);
                 viewHolder.updBtn.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        ViewGroup row = ((ViewGroup)v.getParent());
-                        final String id = ((TextView)row.findViewById(R.id.textView1)).getText().toString();
+                        ViewGroup row = ((ViewGroup) v.getParent());
+                        final String id = ((TextView) row.findViewById(R.id.textView1)).getText().toString();
 
                         openInputDialog(id, new View.OnClickListener() {
                             public void onClick(View v) {
@@ -126,7 +149,7 @@ public class SkillsActivity extends BaseActivity {
 
     }
 
-    private void insertSkill(String skill){
+    private void insertSkill(String skill) {
         try {
             getDatabase().putSkill(skill);
             _productlist = getDatabase().getAllSkills();
@@ -136,7 +159,7 @@ public class SkillsActivity extends BaseActivity {
         }
     }
 
-    private void updateSkill(String key, String skill){
+    private void updateSkill(String key, String skill) {
         try {
             getDatabase().updateSkill(key, skill);
             _productlist = getDatabase().getAllSkills();
@@ -152,7 +175,7 @@ public class SkillsActivity extends BaseActivity {
 
         ((TextView) dlg.findViewById(R.id.textView1)).setText("Update skill:");
         ((EditText) dlg.findViewById(R.id.userInput)).setText(value);
-        try{
+        try {
             ((Button) dlg.findViewById(R.id.okBtn)).setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     dlg.dismiss();
@@ -166,7 +189,7 @@ public class SkillsActivity extends BaseActivity {
                         }
                     });
             dlg.show();
-        }catch (Exception e){
+        } catch (Exception e) {
         }
     }
 }
