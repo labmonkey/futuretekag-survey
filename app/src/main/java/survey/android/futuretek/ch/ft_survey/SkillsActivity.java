@@ -6,7 +6,9 @@
  */
 package survey.android.futuretek.ch.ft_survey;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -89,6 +92,24 @@ public class SkillsActivity extends BaseActivity {
                         adapter.notifyDataSetChanged();
                     }
                 });
+
+                viewHolder.updBtn = (Button) convertView.findViewById(R.id.updateBtn);
+                viewHolder.updBtn.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        ViewGroup row = ((ViewGroup)v.getParent());
+                        final String id = ((TextView)row.findViewById(R.id.textView1)).getText().toString();
+
+                        openInputDialog(id, new View.OnClickListener() {
+                            public void onClick(View v) {
+                                EditText userInput = ((EditText) v.findViewById(R.id.userInput));
+                                String newValue = userInput.getText().toString();
+
+                                updateSkill(id, newValue);
+                            }
+                        });
+                    }
+                });
+
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
@@ -101,6 +122,7 @@ public class SkillsActivity extends BaseActivity {
     private class ViewHolder {
         TextView textView;
         Button delBtn;
+        Button updBtn;
 
     }
 
@@ -114,5 +136,37 @@ public class SkillsActivity extends BaseActivity {
         }
     }
 
+    private void updateSkill(String key, String skill){
+        try {
+            getDatabase().updateSkill(key, skill);
+            _productlist = getDatabase().getAllSkills();
+            adapter.notifyDataSetChanged();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
+    protected void openInputDialog(String value, final View.OnClickListener onClickListener) {
+        final Dialog dlg = new Dialog(this);
+        dlg.setContentView(R.layout.dialog);
+
+        ((TextView) dlg.findViewById(R.id.textView1)).setText("Update skill:");
+        ((EditText) dlg.findViewById(R.id.userInput)).setText(value);
+        try{
+            ((Button) dlg.findViewById(R.id.okBtn)).setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    dlg.dismiss();
+                    onClickListener.onClick(dlg.getWindow().getDecorView());
+                }
+            });
+            dlg.setOnCancelListener(
+                    new DialogInterface.OnCancelListener() {
+                        public void onCancel(DialogInterface dialog) {
+                            dlg.dismiss();
+                        }
+                    });
+            dlg.show();
+        }catch (Exception e){
+        }
+    }
 }

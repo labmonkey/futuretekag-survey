@@ -149,4 +149,12 @@ public class Database extends SQLiteOpenHelper {
 		db.delete(tableSkills, fieldID + " = ?", new String[] { String.valueOf(id) });
 		db.close();
 	}
+
+    public void updateSkill(String key, String value) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(fieldID, value); // get author
+        db.update(tableSkills, values, fieldID + " = ?", new String[] { String.valueOf(key) });
+        db.close();
+    }
 }
